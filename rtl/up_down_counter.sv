@@ -1,7 +1,8 @@
-// Description to be added
+// Counter counts up when enable and counts down when !enable
 //
 // Parameters:
-//
+// MAX - 2
+// WIDTH -2
 //
 // Ports :
 //
@@ -36,7 +37,5 @@ module up_down_counter #(
       next_count = (count > WIDTH'(0)) ? count - WIDTH'(1) : WIDTH'(MAX);
     end
   end
-
-
 
 endmodule
