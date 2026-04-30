@@ -1,4 +1,4 @@
-// Description to be added
+// Counts
 //
 // Parameters:
 //
@@ -37,7 +37,7 @@ module hms_counter #(
   assign minute_rollover = (minutes == MaxMinutes) & second_rollover;
 
   up_down_counter #(
-      .MAX  (32'(MaxSeconds)),
+      .MAX  (N_SECONDS - 1),
       .WIDTH(W_SECONDS)
   ) u_seconds (
       .clk(clk),
@@ -46,7 +46,7 @@ module hms_counter #(
       .count(seconds)
   );
   up_down_counter #(
-      .MAX  (32'(MaxMinutes)),
+      .MAX  (N_MINUTES - 1),
       .WIDTH(W_MINUTES)
   ) u_minute (
       .clk(clk),
@@ -55,7 +55,7 @@ module hms_counter #(
       .count(minutes)
   );
   up_down_counter #(
-      .MAX  (32'(MaxHours)),
+      .MAX  (N_HOURS - 1),
       .WIDTH(W_HOURS)
   ) u_hours (
       .clk(clk),
