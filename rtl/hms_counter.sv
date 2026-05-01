@@ -1,11 +1,20 @@
 // Counts
 //
 // Parameters:
+// N_HOURS
+// N_MINUTES
+// N_SECONDS
 //
+// W_HOURS
+// W_MINUTES
+// W_SECONDS
 //
 // Ports :
-//
-//
+// clk
+// enable
+// hours [1:0]
+// minutes [1:0]
+// seconds [1:0]
 //
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
