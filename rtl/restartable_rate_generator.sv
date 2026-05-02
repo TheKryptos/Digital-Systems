@@ -17,8 +17,8 @@
 module restartable_rate_generator #(
     parameter int CYCLE_COUNT = 2
 ) (
-    input logic clk,
-    input logic run,
+    input  logic clk,
+    input  logic run,
     output logic tick
 );
   // Becomes high at the end of each cycle
@@ -54,7 +54,7 @@ module restartable_rate_generator #(
       assign tick_qualifier = (count == CountWidth'(CYCLE_COUNT - 1));
 
     end else begin : g_special
-        assign tick_qualifier = 1'b1;
+      assign tick_qualifier = 1'b1;
     end
   endgenerate
 

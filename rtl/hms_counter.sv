@@ -1,4 +1,4 @@
-// Counts
+// Counts seconds, minutes, hours and rollovers once seconds/minutes is hit
 //
 // Parameters:
 // N_HOURS
@@ -37,7 +37,6 @@ module hms_counter #(
 );
   localparam logic [W_SECONDS-1:0] MaxSeconds = W_SECONDS'(N_SECONDS - 1);
   localparam logic [W_MINUTES-1:0] MaxMinutes = W_MINUTES'(N_MINUTES - 1);
-  localparam logic [W_HOURS-1:0] MaxHours = W_HOURS'(N_HOURS - 1);
 
   logic second_rollover;  // Rollover from sec to mins
   logic minute_rollover;  // Rollover from min to hour

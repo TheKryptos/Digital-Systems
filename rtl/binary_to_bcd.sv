@@ -1,12 +1,9 @@
-// Description to be added
+// Converts the decimal into 4 bit binary of ones and tens
 //
-// Parameters:
-//
-//
-// Ports :
-//
-//
-//
+// Ports:
+//  bin [6:0]
+//  tens [3:0]
+//  ones [3:0]
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
