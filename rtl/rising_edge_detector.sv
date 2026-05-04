@@ -12,18 +12,18 @@
 `timescale 1ns / 1ps
 
 module rising_edge_detector (
-    input logic clk,
-    input logic sig_in,
+    input  logic clk,
+    input  logic sig_in,
     output logic rise
 );
-    logic prev = '0;
-    logic next;
+  logic prev = '0;
+  logic next;
 
-    always_ff @(posedge clk) begin
-        prev <= next;
-    end
+  always_ff @(posedge clk) begin
+    prev <= next;
+  end
 
-    assign next = sig_in;
+  assign next = sig_in;
 
-    assign rise = (sig_in && !prev);
+  assign rise = (sig_in && !prev);
 endmodule
