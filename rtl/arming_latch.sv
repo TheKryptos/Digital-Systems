@@ -17,7 +17,7 @@ module arming_latch (
 );
   initial armed = '0;
 
-  always_ff @(posedge clk or posedge disarm) begin
+  always_ff @(posedge clk) begin
     if (disarm) armed <= '0;
     if (arm && !disarm) armed <= 1'(1);
   end
