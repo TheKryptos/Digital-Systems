@@ -1,5 +1,5 @@
 // Synchronous set and clear flip-flop
-// clear takes priority
+// disarm takes priority
 //
 // Ports :
 // clk
@@ -19,7 +19,7 @@ module arming_latch (
 
   always_ff @(posedge clk or posedge disarm) begin
     if (disarm) armed <= '0;
-    if (arm & !disarm) armed <= 1'(1);
+    if (arm && !disarm) armed <= 1'(1);
   end
 
 endmodule
