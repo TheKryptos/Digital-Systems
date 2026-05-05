@@ -1,11 +1,9 @@
 // run is low - tick goes low
 // run is high:
 // -if run high for CYCLE_COUNT-1, tick high for 1 clk cycle
-//
 // -if run high for CYCLE_COUNT rising edges, tick high for 1 clk cycle
 // Parameters:
-// MAX - 2
-// WIDTH -2
+// CYCLE_COUNT = 2
 //
 // Ports :
 // clk

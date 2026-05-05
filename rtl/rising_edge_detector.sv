@@ -1,12 +1,10 @@
 // Displays time on seven-segment displays, initialised to 00:00:00,
 // tick rate controlled by SW[1:0]
 //
-// Parameters:
-//
-//
 // Ports :
-//
-//
+// clk
+// sig_in
+// rise
 //
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
