@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module user_top_watch_v2 #(
+module user_top_watch_v3 #(
     parameter int CYCLES_PER_SECOND = 50_000_000
 ) (
     input logic clk,
@@ -87,13 +87,6 @@ module user_top_watch_v2 #(
       .tick(seconds_tick)
   );
 
-  assign seconds_inc = 1'b0;
-  assign seconds_dec = 1'b0;
-  assign minutes_inc = 1'b0;
-  assign minutes_dec = 1'b0;
-  assign hours_inc = 1'b0;
-  assign hours_dec = 1'b0;
-
   assign minutes_tick = seconds_tick && (seconds_disp == 7'(59));
   assign hours_tick = seconds_tick && (seconds_disp == 7'(59)) && minutes_tick && (minutes_disp == 7'(59));
 
@@ -135,9 +128,47 @@ module user_top_watch_v2 #(
   assign minutes_edit = (mode_enable == 3'b010);
   assign hours_edit = (mode_enable == 3'b100);
 
+  // Flash Seven-Segments for corresponding editing mode
   assign blank_hours = hours_edit && pwm_out;
   assign blank_minutes = minutes_edit && pwm_out;
   assign blank_seconds = seconds_edit && pwm_out;
+
+  // ------------------
+  // Edit Logic
+  // ------------------
+
+  // Enter 10Hz mode when KEY[0] or KEY[1] > 0.5s
+
+
+  // Instantiate button_auto_repeat (2 Modes: 2Hz and 10 Hz)
+  logic inc_pulse;
+  logic dec_pulse;
+
+   button_auto_repeat #(
+    .HOLD_CYCLES(CYCLES_PER_SECOND / 2), // 0.5s hold
+    .REPEAT_CYCLES(CYCLES_PER_SECOND / 10) // 10 Hz repeat
+   ) u_inc_repeat (
+    .clk(clk),
+    .button(button[1]),
+    .pulse(inc_pulse)
+  );
+
+  button_auto_repeat #(
+    .HOLD_CYCLES(CYCLES_PER_SECOND / 2), // 0.5s hold
+    .REPEAT_CYCLES(CYCLES_PER_SECOND / 10) // 10 Hz repeat
+  ) u_dec_repeat (
+    .clk(clk),
+    .button(button[0]),
+    .pulse(dec_pulse)
+  );
+
+  // Output Logic
+  assign seconds_inc = seconds_edit && inc_pulse;
+  assign seconds_dec = seconds_edit && dec_pulse;
+  assign minutes_inc = minutes_edit && inc_pulse;
+  assign minutes_dec = minutes_edit && dec_pulse;
+  assign hours_inc   = hours_edit && inc_pulse;
+  assign hours_dec   = hours_edit && dec_pulse;
 
 endmodule
 

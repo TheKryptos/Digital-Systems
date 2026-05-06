@@ -1,8 +1,8 @@
 // Brief press produce immediate pulse (rise)
 // Hold button produce pulse train (pulse train)
 // Parameters:
-// HOLD_CYCLES = 50_000_000
-// REPEAT_CYCLES = 5_000_000
+// HOLD_CYCLES = 50_000_000 - Hold Period
+// REPEAT_CYCLES = 5_000_000 - Hz Rate
 //
 // Ports :
 // clk
