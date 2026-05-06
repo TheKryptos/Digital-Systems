@@ -1,9 +1,6 @@
 `timescale 1ns / 1ps
 
 module user_top_watch_v1 #(
-    // ------------------
-    // Basic Time Display
-    // ------------------
     parameter int CYCLES_PER_SECOND = 50_000_000
 
 ) (
@@ -20,6 +17,10 @@ module user_top_watch_v1 #(
     output logic blank_minutes,
     output logic blank_seconds
 );
+
+  // ------------------
+  // Basic Time Display
+  // ------------------
 
   // Seconds
   logic seconds_tick;

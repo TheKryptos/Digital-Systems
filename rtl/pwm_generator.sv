@@ -1,11 +1,12 @@
 // Description
 //
 // Parameters:
-//
-//
+// PERIOD_CYCLES = 50_000_000
+// DUTY_CYCLES = 25_000_000
 // Ports :
-//
-//
+// clk
+// rst
+// pwm_out
 //
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
