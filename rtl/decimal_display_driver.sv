@@ -17,7 +17,7 @@
 `timescale 1ns / 1ps
 
 module decimal_display_driver (
-    // Decimal values to be displayed (range : 0 -99)
+    // Decimal values to be displayed (range : 0-99)
     // value0 -> HEX1 (tens) and HEX0 (ones)
     // value1 -> HEX3 (tens) and HEX2 (ones)
     // value2 -> HEX5 (tens) and HEX4 (ones)

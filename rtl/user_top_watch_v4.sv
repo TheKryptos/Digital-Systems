@@ -142,10 +142,9 @@ module user_top_watch_v4 #(
   // Edit Logic
   // ------------------
 
-  // Enter 10Hz mode when KEY[0] or KEY[1] > 0.5s
+  /* Enter 10Hz mode when KEY[0] or KEY[1] > 0.5s */
 
-
-  // Instantiate button_auto_repeat (2 Modes: 2Hz and 10 Hz)
+  // Instantiate button_auto_repeat (2 Modes: Inc/Dec at 10Hz)
   logic inc_pulse;
   logic dec_pulse;
 

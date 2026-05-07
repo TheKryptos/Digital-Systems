@@ -1,4 +1,5 @@
 // Counter counts up when enable and counts down when !enable
+// rst high, count = 0 on next rising edge
 //
 // Parameters:
 // MAX - 2
@@ -11,11 +12,12 @@
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
-module up_down_counter #(
+module up_down_counter_rst #(
     parameter int MAX   = 2,
     parameter int WIDTH = 2
 ) (
     input logic clk,
+    input logic rst,
     input logic enable,
     input logic up,
     output logic [WIDTH-1:0] count
@@ -24,7 +26,10 @@ module up_down_counter #(
   initial count = WIDTH'(0);
 
   // Flip-Flop
-  always_ff @(posedge clk) if (enable) count <= next_count;
+  always_ff @(posedge clk) begin
+    if (enable) count <= next_count;
+    if (rst) count <= '0;
+  end
 
   // Next-State Logic
   always_comb begin

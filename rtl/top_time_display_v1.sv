@@ -121,7 +121,7 @@ module top_time_display_v1 #(
       .ones(ones_seconds)
   );
 
-  // 6 seven_segment (This is wrong still)
+  // 6 seven_segment
   seven_segment #(
       .ACTIVE_LOW(32'(1))
   ) seconds_ones (
