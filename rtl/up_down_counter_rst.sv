@@ -27,7 +27,9 @@ module up_down_counter_rst #(
 
   // Flip-Flop
   always_ff @(posedge clk) begin
+    // Stores count when enable is high
     if (enable) count <= next_count;
+    // Resets count to 0 when rst is high
     if (rst) count <= '0;
   end
 
