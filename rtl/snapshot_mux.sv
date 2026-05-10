@@ -1,16 +1,13 @@
-// run is low - tick goes low
-// run is high:
-// -if run high for CYCLE_COUNT-1, tick high for 1 clk cycle
-// -if run high for CYCLE_COUNT rising edges, tick high for 1 clk cycle
-// If CYCLE_COOUNT = 50_000_000 => tick goes high once per second
-//
+// Take a snapshot of the input and selects which value
+// to display
 // Parameters:
-// CYCLE_COUNT = 2
+// WIDTH = 1
 //
 // Ports :
 // clk
-// run
-// tick
+// hold
+// d
+// q
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
@@ -25,6 +22,7 @@ module snapshot_mux #(
   logic [WIDTH-1:0] prev_d;
   initial prev_d = '0;
 
+  // Holds the previous d value
   always_ff @(posedge clk) if (!hold) prev_d <= d;
 
   always_comb begin
