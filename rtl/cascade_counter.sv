@@ -1,14 +1,21 @@
-// Output
-// Converts continuous state into single clk edge
-// Holding the button for a set period enters
-// edit mode
+// Cascading counter increments next corresponding count
+// when previous count wraps
+//
 // Parameters:
-// HOLD_CYCLES = 50_000_000
+// N2
+// N1
+// N0
+// W2
+// W1
+// W0
 //
 // Ports :
 // clk
-// button
-// pulse
+// rst
+// enable
+// count2
+// count1
+// count0
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
