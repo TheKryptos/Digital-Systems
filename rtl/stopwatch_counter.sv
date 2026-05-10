@@ -1,5 +1,5 @@
 // Minutes, seconds, centiseconds stopwatch
-// Increment next corresponding count one centisecond 
+// Increment next corresponding count one centisecond
 // after enable goes high
 //
 // Parameters:
