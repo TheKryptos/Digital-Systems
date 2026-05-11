@@ -19,8 +19,8 @@ module snapshot_mux #(
     input logic [WIDTH-1:0] d,
     output logic [WIDTH-1:0] q
 );
-  logic [WIDTH-1:0] prev_d;
-  initial prev_d = '0;
+  logic [WIDTH-1:0] prev_d = '0;
+
 
   // Holds the previous d value
   always_ff @(posedge clk) if (!hold) prev_d <= d;

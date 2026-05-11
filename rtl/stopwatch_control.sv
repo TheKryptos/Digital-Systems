@@ -14,9 +14,9 @@ module stopwatch_control (
     input logic clk,
     input logic rise_start_stop,  // button[0]: toggles between Start/Stop
     input logic rise_lap,  // button[1]: Lap (while running) / Reset (while stopped)
-    output logic counter_rst,  // Triggers reset
-    output logic counter_enable,  // Controls Running / Stopped
-    output logic lap_hold  // Controls Live / Frozen Display
+    output logic counter_rst = '0,  // Triggers reset
+    output logic counter_enable = '0,  // Controls Running / Stopped
+    output logic lap_hold = '0 // Controls Live / Frozen Display
 );
   // State Encoding // states map to {counter_rst, counter_enable, lap_hold} //
   // localparam logic [2:0] StoppedLive = 3'b000;
@@ -24,13 +24,6 @@ module stopwatch_control (
   // localparam logic [2:0] RunningLive = 3'b010;
   // localparam logic [2:0] RunningFrozen = 3'b011;
   // localparam logic [2:0] Resetting = 3'b100;
-
-  // Initialise outputs
-  initial begin
-    counter_rst = '0;
-    counter_enable = '0;
-    lap_hold = '0;
-  end
 
   // Next-State Declaration
   logic next_rst;
@@ -45,8 +38,11 @@ module stopwatch_control (
   end
 
   // Simultaneous Presses ignore
-  logic valid_start = rise_start_stop && !rise_lap;
-  logic valid_lap = !rise_start_stop && rise_lap;
+  logic valid_start;
+  logic valid_lap;
+
+  assign valid_start = rise_start_stop && !rise_lap;
+  assign valid_lap = !rise_start_stop && rise_lap;
 
   // Next-State Logic counter_rst //
   // Resets when state = StoppedLive
