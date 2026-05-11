@@ -1,3 +1,5 @@
+// Outputs a tick after a specific number of clock cycles
+// Controls tick rate
 // run is low - tick goes low
 // run is high:
 // -if run high for CYCLE_COUNT-1, tick high for 1 clk cycle

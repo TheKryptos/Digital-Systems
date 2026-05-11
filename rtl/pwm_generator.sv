@@ -1,4 +1,5 @@
-// Description
+// Generates a PWM signal
+// DUTY-CYCLE determines the ratio of "on" to "off"
 //
 // Parameters:
 // PERIOD_CYCLES = 50_000_000

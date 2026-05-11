@@ -1,7 +1,6 @@
-// Long-press pulse generator
-// Converts continuous state into single clk edge
-// Holding the button for a set period enters
-// edit mode
+// edit_mode: inc/dec to manually set the timer countdown
+// !editmode: runs as a countdown
+//
 // Parameters:
 // HOLD_CYCLES = 50_000_000
 //
@@ -23,7 +22,7 @@ module editable_countdown #(
     input logic inc,
     input logic dec,
     output logic [WIDTH-1:0] count,
-    output logic borrow_out
+    output logic borrow_out // ticks over when the counter wraps
 );
 
 // Instantiate up_down_counter
