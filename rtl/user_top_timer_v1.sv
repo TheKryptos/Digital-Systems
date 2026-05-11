@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------
-
+// 
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
@@ -26,68 +26,103 @@ module user_top_timer_v1 #(
     output logic blank_seconds
 );
 
-  // Instantiate button_auto_repeat
-  button_auto_repeat #(
-      .HOLD_CYCLES  (),
-      .REPEAT_CYCLES()
-  ) u_button_auto_repeat (
-      .clk(clk),
-      .button(),
-      .pulse(),
-  );
+  // Driving unused outputs to 0
+  /* verilator lint_off UNDRIVEN */
+  logic [2:0] mode_enable;
+  /* verilator lint_on UNDRIVEN */
 
-  // Instantiate edit_mode_selector
-  edit_mode_selector #(
-      .HOLD_CYCLES()
-  ) u_edit_mode_selector (
-      .clk(clk),
-      .button(),
-      .mode_enable()
-  );
+  // Driving unused outputs to 0
+  assign led = '0;
+  assign blank_hours = '0;
+  assign blank_minutes = '0;
+  assign blank_seconds = '0;
 
-  // Instantiate editable_countdown
+  logic tick;
+  logic seconds_borrow;
+  logic minutes_borrow;
+  logic unused_borrow;
+
+  // Hours
+  logic [4:0] hours;
   editable_countdown #(
-      .MAX  (),
-      .WIDTH()
-  ) u_editable_countdown (
+      .MAX  (23),
+      .WIDTH(5)
+  ) u_hours_countdown (
       .clk(clk),
-      .clr(),
-      .tick(),
-      .edit_mode(),
-      .inc(),
-      .dec(),
-      .count(),
-      .borrow_out()
+      .clr(1'(0)),
+      .tick(minutes_borrow),
+      .edit_mode(1'(0)),
+      .inc(1'(0)),
+      .dec(1'(0)),
+      .count(hours),
+      .borrow_out(unused_borrow)
   );
 
-  // Instantiate pwm_generator
-  pwm_generator #(
-      .PERIOD_CYCLES(),
-      .DUTY_CYCLES  ()
-  ) u_pwm_generator (
+  // Minutes
+  logic [5:0] minutes;
+  editable_countdown #(
+      .MAX  (59),
+      .WIDTH(6)
+  ) u_minutes_countdown (
       .clk(clk),
-      .rst(),
-      .pwm_out()
+      .clr(1'(0)),
+      .tick(seconds_borrow),
+      .edit_mode(1'(0)),
+      .inc(1'(0)),
+      .dec(1'(0)),
+      .count(minutes),
+      .borrow_out(minutes_borrow)
   );
+
+  // Seconds
+  logic [5:0] seconds;
+  editable_countdown #(
+      .MAX  (59),
+      .WIDTH(6)
+  ) u_seconds_countdown (
+      .clk(clk),
+      .clr(1'(0)),
+      .tick(tick),
+      .edit_mode(1'(0)),
+      .inc(1'(0)),
+      .dec(1'(0)),
+      .count(seconds),
+      .borrow_out(seconds_borrow)
+  );
+
+  // Zero-extend counter values to display outputs
+  assign hours_disp   = {2'b0, hours};
+  assign minutes_disp = {1'b0, minutes};
+  assign seconds_disp = {1'b0, seconds};
 
   // Instantiate restartable_rate_generator
+  logic running = '0;
   restartable_rate_generator #(
-      .CYCLE_COUNT()
+      .CYCLE_COUNT(CYCLES_PER_SECOND)  // ticks once every second
   ) u_restartable_rate_generator (
       .clk (clk),
-      .run (),
-      .tick()
+      .run (running),
+      .tick(tick)
   );
 
-  // Instantiate rising_edge_detector
-  rising_edge_detector u_rising_edge (
+
+  // ------------------------
+  // Start/Stop Control
+  // ------------------------
+
+  // button[0] controls start/stop //
+  logic rise;
+  rising_edge_detector u_rise_edge_b0 (
       .clk(clk),
-      .sig_in(),
-      .rise()
+      .sig_in(button[0]),
+      .rise(rise)
   );
 
+  // Holds the run value when toggled
+  always_ff @(posedge clk) begin
+    if (rise) running <= !running; // Invert running when button[0] is pressed
+  end
 
-  /* FSM Design */
 
 `ifdef FORMAL
   assign probe_running = running;
