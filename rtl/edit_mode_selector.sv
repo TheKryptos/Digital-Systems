@@ -62,7 +62,7 @@ module edit_mode_selector #(
       .count(count)
   );
 
-  // Counter runs only while armed; resets when disarmed
+  // Counter runs onTly while armed; resets when disarmed
   assign enable_counter = press && armed;
   // reset takes priority when both counter is high
   assign reset_counter = !armed;

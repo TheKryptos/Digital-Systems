@@ -3,7 +3,7 @@
 // ----------------------
 `timescale 1ns / 1ps
 
-module user_top_timer_v1 #(
+module user_top_timer_s4 #(
     /* verilator lint_off UNUSEDPARAM */
     parameter int CYCLES_PER_SECOND = 50_000_000
     /* verilator lint_on UNUSEDPARAM */
@@ -117,7 +117,6 @@ module user_top_timer_v1 #(
 
   // Editing modes
   logic editing_mode;
-  logic [2:0] mode_enable;
   assign seconds_edit = (mode_enable == 3'b001);
   assign minutes_edit = (mode_enable == 3'b010);
   assign hours_edit   = (mode_enable == 3'b100);
@@ -164,6 +163,7 @@ module user_top_timer_v1 #(
   logic enter_edit;
   assign enter_edit = button[3] && !running;
 
+  logic [2:0] mode_enable;
   edit_mode_selector #(
       .HOLD_CYCLES(CYCLES_PER_SECOND)
   ) u_set_mode (

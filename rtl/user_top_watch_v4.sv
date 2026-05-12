@@ -166,7 +166,7 @@ module user_top_watch_v4 #(
     .pulse(dec_pulse)
   );
 
-  // Output Logic
+  // Increment/Decrement Logic
   assign seconds_inc = seconds_edit && inc_pulse;
   assign seconds_dec = seconds_edit && dec_pulse;
   assign minutes_inc = minutes_edit && inc_pulse;
