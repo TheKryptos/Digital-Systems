@@ -30,9 +30,15 @@ module user_top_timer_v1 #(
   assign led = '0;
 
   logic clr;
+  assign clr = '0;
   logic tick;
+
+  logic stop;
+  logic editing_mode;
+  logic [2:0] mode_enable;
+
   logic safe_tick;
-  assign safe_tick = tick && !stop && !editing_mode;
+  assign safe_tick = tick && running && !stop && !editing_mode;
 
   logic seconds_borrow;
   logic minutes_borrow;
@@ -96,9 +102,8 @@ module user_top_timer_v1 #(
       .borrow_out(seconds_borrow)
   );
 
-
   // Zero-extend counter values to display outputs
-  assign hours_disp = {2'b0, hours};
+  assign hours_disp   = {2'b0, hours};
   assign minutes_disp = {1'b0, minutes};
   assign seconds_disp = {1'b0, seconds};
 
@@ -117,15 +122,12 @@ module user_top_timer_v1 #(
   // ----------------------------
 
   // Editing modes
-  logic editing_mode;
-  logic [2:0] mode_enable;
   assign seconds_edit = (mode_enable == 3'b001);
   assign minutes_edit = (mode_enable == 3'b010);
-  assign hours_edit   = (mode_enable == 3'b100);
+  assign hours_edit = (mode_enable == 3'b100);
   assign editing_mode = seconds_edit || minutes_edit || hours_edit;
 
   // Auto-Stop at Zero
-  logic stop;
   assign stop = (seconds == 6'(0)) && (minutes == 6'(0)) && (hours == 5'(0));
 
 
