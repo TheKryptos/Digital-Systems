@@ -27,9 +27,9 @@ module user_top_timer_s3 #(
 );
 
   // Driving unused outputs to 0
-  /* verilator lint_off UNDRIVEN */
-  logic [2:0] mode_enable;
-  /* verilator lint_on UNDRIVEN */
+  /* verilator lint_off UNUSED */
+  logic [2:0] mode_enable = 3'b000;
+  /* verilator lint_on UNUSED */
 
   // Driving unused outputs to 0
   assign led = '0;
@@ -40,7 +40,6 @@ module user_top_timer_s3 #(
   logic tick;
   logic seconds_borrow;
   logic minutes_borrow;
-  logic unused_borrow;
 
   // Hours
   logic [4:0] hours;
@@ -55,7 +54,9 @@ module user_top_timer_s3 #(
       .inc(1'(0)),
       .dec(1'(0)),
       .count(hours),
-      .borrow_out(unused_borrow)
+      /* verilator lint_off PINCONNECTEMPTY */
+      .borrow_out()
+      /* verilator lint_on PINCONNECTEMPTY */
   );
 
   // Minutes

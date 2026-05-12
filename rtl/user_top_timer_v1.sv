@@ -1,6 +1,6 @@
-// ----------------------
-// Timer Integration
-// ----------------------
+// ------------------------------
+// Timer Integration (Full Specs)
+// ------------------------------
 `timescale 1ns / 1ps
 
 module user_top_timer_v1 #(
@@ -28,11 +28,12 @@ module user_top_timer_v1 #(
 
   // Driving unused outputs to 0
   assign led = '0;
-  assign blank_hours = '0;
-  assign blank_minutes = '0;
-  assign blank_seconds = '0;
 
+  logic clr;
   logic tick;
+  logic safe_tick;
+  assign safe_tick = tick && !stop && !editing_mode;
+
   logic seconds_borrow;
   logic minutes_borrow;
   logic unused_borrow;
@@ -48,7 +49,7 @@ module user_top_timer_v1 #(
       .WIDTH(5)
   ) u_hours_countdown (
       .clk(clk),
-      .clr(1'(0)),
+      .clr(clr),
       .tick(minutes_borrow),
       .edit_mode(hours_edit),
       .inc(hours_inc),
@@ -67,7 +68,7 @@ module user_top_timer_v1 #(
       .WIDTH(6)
   ) u_minutes_countdown (
       .clk(clk),
-      .clr(1'(0)),
+      .clr(clr),
       .tick(seconds_borrow),
       .edit_mode(minutes_edit),
       .inc(minutes_inc),
@@ -86,8 +87,8 @@ module user_top_timer_v1 #(
       .WIDTH(6)
   ) u_seconds_countdown (
       .clk(clk),
-      .clr(1'(0)),
-      .tick(tick),
+      .clr(clr),
+      .tick(safe_tick),
       .edit_mode(seconds_edit),
       .inc(seconds_inc),
       .dec(seconds_dec),
@@ -95,8 +96,9 @@ module user_top_timer_v1 #(
       .borrow_out(seconds_borrow)
   );
 
+
   // Zero-extend counter values to display outputs
-  assign hours_disp   = {2'b0, hours};
+  assign hours_disp = {2'b0, hours};
   assign minutes_disp = {1'b0, minutes};
   assign seconds_disp = {1'b0, seconds};
 
@@ -106,10 +108,9 @@ module user_top_timer_v1 #(
       .CYCLE_COUNT(CYCLES_PER_SECOND)  // ticks once every second
   ) u_restartable_rate_generator (
       .clk (clk),
-      .run (running),
+      .run (running && !stop),
       .tick(tick)
   );
-
 
   // ----------------------------
   // FSM (STOPPED, RUNNING, SET)
@@ -123,8 +124,12 @@ module user_top_timer_v1 #(
   assign hours_edit   = (mode_enable == 3'b100);
   assign editing_mode = seconds_edit || minutes_edit || hours_edit;
 
+  // Auto-Stop at Zero
+  logic stop;
+  assign stop = (seconds == 6'(0)) && (minutes == 6'(0)) && (hours == 5'(0));
 
-  // button[0] controls start/stop //
+
+  // button[0] controls timer start/stop //
   logic rise;
   rising_edge_detector u_rise_edge_b0 (
       .clk(clk),
@@ -132,13 +137,8 @@ module user_top_timer_v1 #(
       .rise(rise)
   );
 
-  // Auto-Stop at Zero
-  logic stop;
-  assign stop = (seconds == 6'(0)) && (minutes == 6'(0)) && (hours == 5'(0));
-
   // Next-State Declaration
   logic next_running;
-
 
   // State Register
   always_ff @(posedge clk) begin
@@ -204,6 +204,27 @@ module user_top_timer_v1 #(
   assign minutes_dec = minutes_edit && dec_pulse;
   assign hours_inc   = hours_edit && inc_pulse;
   assign hours_dec   = hours_edit && dec_pulse;
+
+  // ---------------------------------
+  // Flash Display in Editing Mode
+  // ---------------------------------
+
+  // Instantiate pwm_generator
+  logic pwm_out;
+  pwm_generator #(
+      .PERIOD_CYCLES(CYCLES_PER_SECOND / 2),  // Blinks at 2Hz
+      .DUTY_CYCLES  (CYCLES_PER_SECOND / 10)  // 2/10: 80% DUTY_CYCLES on high
+  ) u_pwm_generator (
+      .clk(clk),
+      .rst(1'(0)),
+      .pwm_out(pwm_out)
+  );
+
+
+  // Flash Seven-Segments for corresponding editing mode
+  assign blank_hours   = hours_edit && pwm_out;
+  assign blank_minutes = minutes_edit && pwm_out;
+  assign blank_seconds = seconds_edit && pwm_out;
 
 
 `ifdef FORMAL
