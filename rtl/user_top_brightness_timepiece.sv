@@ -1,9 +1,9 @@
-// ---------------------------------
-// Brightness Control (via SW[9:8])
-// ---------------------------------
+// --------------------------------------------
+// Final Design- Digital Watch (Full Features)
+// --------------------------------------------
 `timescale 1ns / 1ps
 
-module user_top_brightness_wrapper #(
+module user_top_brightness_timepiece #(
     /* verilator lint_off UNUSEDPARAM */
     parameter int CYCLES_PER_SECOND = 50_000_000
     /* verilator lint_on UNUSEDPARAM */
@@ -30,9 +30,9 @@ module user_top_brightness_wrapper #(
   logic blank_m;
   logic blank_s;
 
-  user_top #(
+  user_top_timepiece_v1 #(
       .CYCLES_PER_SECOND(CYCLES_PER_SECOND)
-  ) u_user_top (
+  ) u_user_top_timepiece_v1 (
       .clk(clk),
       .button(button),
       .sw(sw),
