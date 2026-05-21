@@ -4,7 +4,7 @@
 // run is high:
 // -if run high for CYCLE_COUNT-1, tick high for 1 clk cycle
 // -if run high for CYCLE_COUNT rising edges, tick high for 1 clk cycle
-// If CYCLE_COOUNT = 50_000_000 => tick goes high once per second
+// If CYCLE_COUNT = 50_000_000 => tick goes high once per second
 //
 // Parameters:
 // CYCLE_COUNT = 2
@@ -26,12 +26,9 @@ module restartable_rate_generator #(
   // Becomes high at the end of each cycle
   logic tick_qualifier;
 
-  // state register (flip-flop)
+  // State register (flip-flop)
   logic running = 1'b0;
   always_ff @(posedge clk) running <= run;
-
-  // Output logic // tick_qualifier is determined by generate block
-  assign tick = running && tick_qualifier;
 
   generate
     if (CYCLE_COUNT > 1) begin : g_general
@@ -59,5 +56,8 @@ module restartable_rate_generator #(
       assign tick_qualifier = 1'b1;
     end
   endgenerate
+
+  // Output logic // tick_qualifier is determined by generate block
+  assign tick = running && tick_qualifier;
 
 endmodule

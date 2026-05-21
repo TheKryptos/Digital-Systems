@@ -128,7 +128,6 @@ module user_top_timepiece_v1 #(
         timer_in = ui_top_in;
         watch_in = ui_top_in_no_buttons;
         ui_top_out = timer_out;
-
       end
       // Watch
       default: begin

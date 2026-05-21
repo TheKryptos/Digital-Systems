@@ -188,7 +188,6 @@ module user_top_timer_v1 #(
       .pulse(inc_pulse)
   );
 
-
   // Decrement
   button_auto_repeat #(
       .HOLD_CYCLES  (CYCLES_PER_SECOND / 2),  // 0.5s hold
@@ -222,12 +221,10 @@ module user_top_timer_v1 #(
       .pwm_out(pwm_out)
   );
 
-
   // Flash Seven-Segments for corresponding editing mode
   assign blank_hours   = hours_edit && pwm_out;
   assign blank_minutes = minutes_edit && pwm_out;
   assign blank_seconds = seconds_edit && pwm_out;
-
 
 `ifdef FORMAL
   assign probe_running = running;

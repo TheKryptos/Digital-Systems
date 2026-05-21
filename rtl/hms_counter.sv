@@ -71,4 +71,5 @@ module hms_counter #(
       .enable(enable & minute_rollover),
       .count(hours)
   );
+
 endmodule

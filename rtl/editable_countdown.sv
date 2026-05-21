@@ -48,5 +48,4 @@ assign up = inc_event;
 // borrow_out high only when counter reaches 0
 assign borrow_out = (count == '0) && tick_event && !clr && !edit_mode;
 
-
 endmodule

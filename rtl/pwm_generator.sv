@@ -23,13 +23,13 @@ module pwm_generator #(
     input  logic rst,
     output logic pwm_out
 );
-  localparam int WIDTH = 26;
-  logic [WIDTH-1:0] count;
+  localparam int CountWidth = $clog2(PERIOD_CYCLES);
+  logic [CountWidth-1:0] count;
 
   mod_n_counter #(
       .N(PERIOD_CYCLES),
-      .WIDTH(WIDTH)
-  ) mod_counter (
+      .WIDTH(CountWidth)
+  ) u_mod_counter (
       .clk(clk),
       .rst(rst),
       .enable(1'b1),

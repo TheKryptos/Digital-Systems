@@ -86,5 +86,4 @@ module cascade_counter #(
   assign count1  = W1'(counting1);
   assign count2  = W2'(counting2);
 
-
 endmodule

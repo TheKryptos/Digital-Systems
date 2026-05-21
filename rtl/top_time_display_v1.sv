@@ -24,8 +24,6 @@ module top_time_display_v1 #(
     output logic [6:0] HEX0
 );
 
-  // Instantiation //
-
   // 3 restartable_rate_generator //
   localparam int CYCLECOUNT1HZ = CYCLES_PER_SECOND;
   localparam int CYCLECOUNT25HZ = CYCLES_PER_SECOND / 25;
@@ -39,7 +37,7 @@ module top_time_display_v1 #(
   // 1Hz  Tick Rate
   restartable_rate_generator #(
       .CYCLE_COUNT(CYCLECOUNT1HZ)
-  ) tick_rate_1Hz (
+  ) u_1Hz_tick (
       .clk (CLOCK_50),
       .run (run),
       .tick(tick_1Hz)
@@ -48,7 +46,7 @@ module top_time_display_v1 #(
   // 25 Hz Tick Rate
   restartable_rate_generator #(
       .CYCLE_COUNT(CYCLECOUNT25HZ)
-  ) tick_rate_ (
+  ) u_25Hz_tick (
       .clk (CLOCK_50),
       .run (run),
       .tick(tick_25Hz)
@@ -57,7 +55,7 @@ module top_time_display_v1 #(
   // 1 kHz Tick Rate
   restartable_rate_generator #(
       .CYCLE_COUNT(CYCLECOUNT1KHZ)
-  ) tick_rate_3 (
+  ) u_1kHz_tick (
       .clk (CLOCK_50),
       .run (run),
       .tick(tick_1kHz)
@@ -87,7 +85,7 @@ module top_time_display_v1 #(
       .W_HOURS  (5),
       .W_MINUTES(6),
       .W_SECONDS(6)
-  ) hms_count (
+  ) u_hms_count (
       .clk(CLOCK_50),
       .enable(selected_tick),
       .hours(hours),
@@ -103,19 +101,19 @@ module top_time_display_v1 #(
   logic [3:0] tens_seconds;
   logic [3:0] ones_seconds;
 
-  binary_to_bcd bcd_hours (
+  binary_to_bcd u_bcd_hours (
       .bin ({2'b0, hours}),
       .tens(tens_hours),
       .ones(ones_hours)
   );
 
-  binary_to_bcd bcd_minutes (
+  binary_to_bcd u_bcd_minutes (
       .bin ({1'b0, minutes}),
       .tens(tens_minutes),
       .ones(ones_minutes)
   );
 
-  binary_to_bcd bcd_seconds (
+  binary_to_bcd u_bcd_seconds (
       .bin ({1'b0, seconds}),
       .tens(tens_seconds),
       .ones(ones_seconds)
@@ -124,7 +122,7 @@ module top_time_display_v1 #(
   // 6 seven_segment
   seven_segment #(
       .ACTIVE_LOW(32'(1))
-  ) seconds_ones (
+  ) u_seconds_ones (
       .digit(ones_seconds),
       .blank(1'b0),
       .segments(HEX0)
@@ -132,7 +130,7 @@ module top_time_display_v1 #(
 
   seven_segment #(
       .ACTIVE_LOW(32'(1))
-  ) seconds_tens (
+  ) u_seconds_tens (
       .digit(tens_seconds),
       .blank(1'b0),
       .segments(HEX1)
@@ -140,7 +138,7 @@ module top_time_display_v1 #(
 
   seven_segment #(
       .ACTIVE_LOW(32'(1))
-  ) minutes_ones (
+  ) u_minutes_ones (
       .digit(ones_minutes),
       .blank(1'b0),
       .segments(HEX2)
@@ -148,7 +146,7 @@ module top_time_display_v1 #(
 
   seven_segment #(
       .ACTIVE_LOW(32'(1))
-  ) minutes_tens (
+  ) u_minutes_tens (
       .digit(tens_minutes),
       .blank(1'b0),
       .segments(HEX3)
@@ -156,7 +154,7 @@ module top_time_display_v1 #(
 
   seven_segment #(
       .ACTIVE_LOW(32'(1))
-  ) hours_ones (
+  ) u_hours_ones (
       .digit(ones_hours),
       .blank(1'b0),
       .segments(HEX4)
@@ -164,7 +162,7 @@ module top_time_display_v1 #(
 
   seven_segment #(
       .ACTIVE_LOW(32'(1))
-  ) hours_tens (
+  ) u_hours_tens (
       .digit(tens_hours),
       .blank(1'b0),
       .segments(HEX5)

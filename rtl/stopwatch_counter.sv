@@ -55,5 +55,4 @@ module stopwatch_counter #(
       .tick(tick)
   );
 
-
 endmodule

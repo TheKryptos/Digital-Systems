@@ -1,14 +1,15 @@
-// Description
+// Counter that counts up to N - 1, wraps back to 0 when enable is high
+// Synchronous rst when rst signal is high
 //
 // Parameters:
-// MAX - 2
-// WIDTH -2
+// N - 4 (Maximum count)
+// WIDTH - 2 (Width of maximum count)
 //
 // Ports :
 // clk
 // rst
 // enable
-// count [1:0]
+// count [WIDTH-1:0]
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
